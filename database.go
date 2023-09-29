@@ -3,6 +3,8 @@ package main
 import (
 	"database/sql"
 	"fmt"
+
+	_ "github.com/lib/pq"
 )
 
 func setupDatabase() (*sql.DB, error) {
@@ -21,15 +23,4 @@ func setupDatabase() (*sql.DB, error) {
 	fmt.Println("Successfully connected to the PostgreSQL database!")
 
 	return db, nil
-}
-
-// Get the value of a key from the database
-func getKey(dbConnection *sql.DB, key string) (string, error) {
-	var value string
-	err := dbConnection.QueryRow("SELECT value FROM kv WHERE key = $1 LIMIT 1", key).Scan(&value)
-	if err != nil {
-		return "", err
-	}
-
-	return value, nil
 }

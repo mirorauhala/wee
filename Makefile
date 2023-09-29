@@ -1,4 +1,4 @@
-.PHONY: run start-db stop-db build clean
+.PHONY: run start-db stop-db migrate build clean
 
 all: run
 
@@ -17,6 +17,10 @@ start-db:
 stop-db:
 	@echo "Stopping server..."
 	@docker compose down
+
+migrate:
+	@echo "Migrating database..."
+	docker run -v ./migrations:/migrations --network host migrate/migrate:4 -path=/migrations/ -database postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable $(MIGRATE_COMMAND)
 
 build:
 	@echo "Building server..."
